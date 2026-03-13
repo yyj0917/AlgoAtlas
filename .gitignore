@@ -39,3 +39,13 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# markdown file
+.docs/*
+
+# claude.md
+.claude/*
+CLAUDE.md
+
+# v0 design reference
+.v0-design/*
