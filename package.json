@@ -9,7 +9,15 @@
     "lint": "next lint",
     "format": "prettier --write \"src/**/*.{ts,tsx,css,md}\"",
     "format:check": "prettier --check \"src/**/*.{ts,tsx,css,md}\"",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "data:seed": "dotenv -e .env -- tsx data/scripts/upload-seed.ts",
+    "data:seed:reset": "dotenv -e .env -- tsx data/scripts/upload-seed.ts --reset",
+    "data:problems": "dotenv -e .env -- tsx data/scripts/upload-problems.ts",
+    "data:concepts": "dotenv -e .env -- tsx data/scripts/upload-concepts.ts",
+    "data:solutions": "dotenv -e .env -- tsx data/scripts/upload-solutions.ts",
+    "data:sync": "dotenv -e .env -- tsx data/scripts/sync-counts.ts",
+    "data:cs-questions": "dotenv -e .env -- tsx data/scripts/upload-cs-questions.ts",
+    "data:verify": "tsx data/scripts/verify-problems.ts"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
@@ -35,16 +43,20 @@
   "devDependencies": {
     "@eslint/eslintrc": "^3.3.5",
     "@tailwindcss/postcss": "^4",
+    "@tailwindcss/typography": "^0.5.19",
     "@types/node": "^20.19.37",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "babel-plugin-react-compiler": "1.0.0",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "eslint-config-prettier": "^10.1.8",
+    "gray-matter": "^4.0.3",
     "prettier": "^3.8.1",
     "prettier-plugin-tailwindcss": "^0.7.2",
     "tailwindcss": "^4",
+    "tsx": "^4.21.0",
     "typescript": "^5"
   }
 }

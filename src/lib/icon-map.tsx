@@ -1,0 +1,50 @@
+import {
+  Layers,
+  GitBranch,
+  Binary,
+  Search,
+  Database,
+  Hash,
+  Type,
+  Calculator,
+  Code,
+  Split,
+  Cpu,
+  Network,
+  Boxes,
+  HardDrive,
+  Cog,
+  Brain,
+  Server,
+  Shield,
+  Cloud,
+  BookOpen,
+  type LucideIcon,
+} from 'lucide-react';
+
+const iconMap: Record<string, LucideIcon> = {
+  Layers,
+  GitBranch,
+  Binary,
+  Search,
+  Database,
+  Hash,
+  Type,
+  Calculator,
+  Code,
+  Split,
+  Cpu,
+  Network,
+  Boxes,
+  HardDrive,
+  Cog,
+  Brain,
+  Server,
+  Shield,
+  Cloud,
+  BookOpen,
+};
+
+export function getIcon(name: string): LucideIcon {
+  return iconMap[name] ?? BookOpen;
+}

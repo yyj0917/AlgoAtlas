@@ -49,3 +49,6 @@ CLAUDE.md
 
 # v0 design reference
 .v0-design/*
+
+# data structure
+data/*
