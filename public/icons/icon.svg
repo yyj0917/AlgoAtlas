@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="none">
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="#09090b"/>
+
+  <!-- Graph nodes and edges (algorithm visualization) -->
+  <!-- Edges -->
+  <line x1="160" y1="180" x2="256" y2="280" stroke="#6366f1" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <line x1="352" y1="180" x2="256" y2="280" stroke="#6366f1" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <line x1="160" y1="180" x2="352" y2="180" stroke="#6366f1" stroke-width="10" stroke-linecap="round" opacity="0.5"/>
+  <line x1="256" y1="280" x2="180" y2="360" stroke="#8b5cf6" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+  <line x1="256" y1="280" x2="332" y2="360" stroke="#8b5cf6" stroke-width="10" stroke-linecap="round" opacity="0.7"/>
+
+  <!-- Nodes -->
+  <circle cx="160" cy="180" r="28" fill="#6366f1"/>
+  <circle cx="352" cy="180" r="28" fill="#6366f1"/>
+  <circle cx="256" cy="280" r="32" fill="#8b5cf6"/>
+  <circle cx="180" cy="360" r="24" fill="#a78bfa"/>
+  <circle cx="332" cy="360" r="24" fill="#a78bfa"/>
+
+  <!-- "A" letter subtle overlay -->
+  <text x="256" y="290" text-anchor="middle" dominant-baseline="middle" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="800" fill="white" opacity="0.15">AA</text>
+</svg>
