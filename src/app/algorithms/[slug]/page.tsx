@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
@@ -29,6 +30,35 @@ export const revalidate = 3600;
 export async function generateStaticParams() {
   const algorithms = await getAlgorithms();
   return algorithms.map((a) => ({ slug: a.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const algorithm = await getAlgorithmBySlug(slug);
+
+  if (!algorithm) {
+    return { title: '알고리즘을 찾을 수 없습니다' };
+  }
+
+  const title = `${algorithm.name} (${algorithm.nameEn})`;
+  const description =
+    algorithm.description ||
+    `${algorithm.name} 알고리즘의 개념과 유형별 풀이를 학습하세요. ${algorithm.themeCount}개 테마, ${algorithm.problemCount}개 문제가 준비되어 있습니다.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/algorithms/${slug}` },
+    openGraph: {
+      title: `${title} | AlgoAtlas`,
+      description,
+      url: `/algorithms/${slug}`,
+    },
+  };
 }
 
 export default async function AlgorithmDetailPage({

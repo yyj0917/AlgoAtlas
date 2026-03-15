@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ChevronRight, ArrowRight, BookOpen, FileQuestion } from 'lucide-react';
@@ -12,11 +13,45 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { getCSCategoryBySlug, getCSTopicsByCategorySlug } from '@/lib/firestore';
+import { getCSCategories, getCSCategoryBySlug, getCSTopicsByCategorySlug } from '@/lib/firestore';
 import { getIcon } from '@/lib/icon-map';
 import { getThemeDifficultyColor } from '@/lib/utils';
 
 export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const categories = await getCSCategories();
+  return categories.map((c) => ({ slug: c.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const category = await getCSCategoryBySlug(slug);
+
+  if (!category) {
+    return { title: 'CS 카테고리를 찾을 수 없습니다' };
+  }
+
+  const title = `${category.name} (${category.nameEn})`;
+  const description =
+    category.description ||
+    `${category.name} 관련 CS 개념을 학습하세요. ${category.topicCount}개 토픽, ${category.questionCount}개 면접 문항이 준비되어 있습니다.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/cs/${slug}` },
+    openGraph: {
+      title: `${title} | AlgoAtlas`,
+      description,
+      url: `/cs/${slug}`,
+    },
+  };
+}
 
 export default async function CSCategoryPage({
   params,

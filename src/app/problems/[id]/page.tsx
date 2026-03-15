@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ExternalLink, Clock, HardDrive } from 'lucide-react';
@@ -24,11 +25,52 @@ import {
   DialogTrigger,
 } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
-import { getProblemById, getSolutionsByProblemId, getProblemsByThemeSlug } from '@/lib/firestore';
+import { getProblemById, getSolutionsByProblemId, getProblemsByThemeSlug, getAllProblems } from '@/lib/firestore';
 import { getDifficultyColor, getProblemUrl } from '@/lib/utils';
 import { ProblemCodeSection } from './problem-code-section';
 
 export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const problems = await getAllProblems();
+  return problems.map((p) => ({ id: p.id }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const { id } = await params;
+  const problem = await getProblemById(id);
+
+  if (!problem) {
+    return { title: '문제를 찾을 수 없습니다' };
+  }
+
+  const platformName =
+    problem.platform === 'baekjoon'
+      ? '백준'
+      : problem.platform === 'programmers'
+        ? '프로그래머스'
+        : 'LeetCode';
+
+  const title = problem.titleEn
+    ? `${problem.title} (${problem.titleEn})`
+    : problem.title;
+  const description = `[${platformName} ${problem.difficultyLabel}] ${problem.title} - 풀이 접근법과 코드, 복잡도 분석을 확인하세요. 태그: ${problem.tags.join(', ')}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/problems/${id}` },
+    openGraph: {
+      title: `${problem.title} | AlgoAtlas`,
+      description,
+      url: `/problems/${id}`,
+    },
+  };
+}
 
 const PLATFORM_DISPLAY: Record<string, string> = {
   baekjoon: '백준',

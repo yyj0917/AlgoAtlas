@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { SiteHeader } from '@/components/layout/site-header';
@@ -12,6 +13,7 @@ import {
 } from '@/components/ui/breadcrumb';
 import { Badge } from '@/components/ui/badge';
 import {
+  getAllThemes,
   getThemeBySlug,
   getAlgorithmBySlug,
   getProblemsByThemeSlug,
@@ -21,6 +23,40 @@ import { getThemeDifficultyColor } from '@/lib/utils';
 import { ThemeDetailClient } from './theme-detail-client';
 
 export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const themes = await getAllThemes();
+  return themes.map((t) => ({ slug: t.slug }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}): Promise<Metadata> {
+  const { slug } = await params;
+  const theme = await getThemeBySlug(slug);
+
+  if (!theme) {
+    return { title: '테마를 찾을 수 없습니다' };
+  }
+
+  const title = theme.nameEn ? `${theme.name} (${theme.nameEn})` : theme.name;
+  const description =
+    theme.description ||
+    `${theme.name} 알고리즘 테마 - 개념과 풀이, ${theme.problemCount}개 문제를 학습하세요. 난이도: ${theme.difficulty}, 태그: ${(theme.tags ?? []).join(', ')}`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/themes/${slug}` },
+    openGraph: {
+      title: `${title} | AlgoAtlas`,
+      description,
+      url: `/themes/${slug}`,
+    },
+  };
+}
 
 export default async function ThemeDetailPage({
   params,

@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -15,6 +16,21 @@ import { getAlgorithms } from '@/lib/firestore';
 import { getIcon } from '@/lib/icon-map';
 
 export const revalidate = 3600; // 1시간 캐시
+
+export const metadata: Metadata = {
+  title: '알고리즘',
+  description:
+    '다이나믹 프로그래밍, 그래프, 정렬, 그리디 등 코딩테스트 핵심 알고리즘을 유형별로 학습하세요. 각 알고리즘의 개념과 풀이를 체계적으로 정리했습니다.',
+  alternates: {
+    canonical: '/algorithms',
+  },
+  openGraph: {
+    title: '알고리즘 | AlgoAtlas',
+    description:
+      '다이나믹 프로그래밍, 그래프, 정렬, 그리디 등 코딩테스트 핵심 알고리즘을 유형별로 학습하세요.',
+    url: '/algorithms',
+  },
+};
 
 export default async function AlgorithmsPage() {
   const algorithms = await getAlgorithms();

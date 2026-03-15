@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
 
@@ -15,6 +16,19 @@ import { getCSCategories } from '@/lib/firestore';
 import { getIcon } from '@/lib/icon-map';
 
 export const revalidate = 3600;
+
+export const metadata: Metadata = {
+  title: 'CS 지식',
+  description:
+    '운영체제, 네트워크, 데이터베이스, 자료구조 등 개발자 면접 필수 CS 지식을 체계적으로 학습하세요. 면접 예상 질문과 개념 설명을 한 곳에서 확인하세요.',
+  alternates: { canonical: '/cs' },
+  openGraph: {
+    title: 'CS 지식 | AlgoAtlas',
+    description:
+      '운영체제, 네트워크, 데이터베이스 등 개발자 면접 필수 CS 개념을 학습하세요.',
+    url: '/cs',
+  },
+};
 
 export default async function CSPage() {
   const categories = await getCSCategories();

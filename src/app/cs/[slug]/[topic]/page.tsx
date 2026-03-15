@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import { ChevronRight, BookOpen } from 'lucide-react';
@@ -8,6 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import {
+  getCSCategories,
   getCSCategoryBySlug,
   getCSTopicById,
   getCSQuestionsByTopicId,
@@ -17,6 +19,51 @@ import { getThemeDifficultyColor } from '@/lib/utils';
 import { CSTopicClient } from './cs-topic-client';
 
 export const revalidate = 3600;
+
+export async function generateStaticParams() {
+  const categories = await getCSCategories();
+  const paramsList = await Promise.all(
+    categories.map(async (cat) => {
+      const topics = await getCSTopicsByCategorySlug(cat.slug);
+      return topics.map((topic) => ({ slug: cat.slug, topic: topic.slug }));
+    }),
+  );
+  return paramsList.flat();
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string; topic: string }>;
+}): Promise<Metadata> {
+  const { slug: categorySlug, topic: topicSlug } = await params;
+  const topicId = `${categorySlug}-${topicSlug}`;
+
+  const [category, topic] = await Promise.all([
+    getCSCategoryBySlug(categorySlug),
+    getCSTopicById(topicId),
+  ]);
+
+  if (!category || !topic) {
+    return { title: 'CS 토픽을 찾을 수 없습니다' };
+  }
+
+  const title = `${topic.name} (${topic.nameEn})`;
+  const description =
+    topic.description ||
+    `${category.name} > ${topic.name} - CS 핵심 개념과 면접 예상 질문을 학습하세요.`;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: `/cs/${categorySlug}/${topicSlug}` },
+    openGraph: {
+      title: `${title} | AlgoAtlas`,
+      description,
+      url: `/cs/${categorySlug}/${topicSlug}`,
+    },
+  };
+}
 
 export default async function CSTopicPage({
   params,
